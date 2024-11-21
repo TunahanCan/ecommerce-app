@@ -54,6 +54,7 @@ public class InvoiceService {
                 .mapToDouble(Invoice::getAmount)
                 .sum();
         double newTotal = totalApprovedAmount + request.getAmount();
+
         boolean isApproved = newTotal <= invoiceLimit;
         InvoiceStatus status = isApproved ? InvoiceStatus.APPROVED : InvoiceStatus.REJECTED;
 
