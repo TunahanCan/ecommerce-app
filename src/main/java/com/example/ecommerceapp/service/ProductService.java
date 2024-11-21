@@ -18,11 +18,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    /**
-     * Tüm ürünleri getirir ve önbelleğe alır.
-     *
-     * @return Tüm ürünlerin listesi
-     */
+
     @Cacheable(value = "productList")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -57,7 +53,7 @@ public class ProductService {
      * @param productDetails Güncellenmiş ürün detayları
      * @return Güncellenmiş ürün
      */
-    @CacheEvict(value = "productList",allEntries = true)
+    @CacheEvict(value = "productList", allEntries = true)
     public Product updateProduct(Long id, Product productDetails) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

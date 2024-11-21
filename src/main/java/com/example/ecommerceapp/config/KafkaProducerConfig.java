@@ -1,7 +1,5 @@
 package com.example.ecommerceapp.config;
 
-import com.example.ecommerceapp.model.dto.InvoiceRejectedEventDTO;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -25,25 +23,38 @@ public class KafkaProducerConfig {
     @Value("${app.kafka.rejected.topic}")
     private String topicName;
 
-    @Bean
-    public ProducerFactory<String, InvoiceRejectedEventDTO> producerFactory() {
+
+    private Map<String, Object> producerConfigs() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        configProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        return configProps;
     }
 
     @Bean
-    public KafkaTemplate<String, InvoiceRejectedEventDTO> kafkaTemplate() {
+    public ProducerFactory<String, String> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    @Bean
-    public NewTopic rejectedInvoicesTopic() {
-        return TopicBuilder.name(topicName)
+    private NewTopic createTopic(String topicName) {
+        return TopicBuilder
+                .name(topicName)
                 .partitions(1)
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic invoiceRejectedEventTopic() {
+        return createTopic(topicName);
+    }
+
 }

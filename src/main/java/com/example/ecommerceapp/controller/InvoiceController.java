@@ -3,12 +3,13 @@ package com.example.ecommerceapp.controller;
 
 import com.example.ecommerceapp.model.dto.ApiResponseDTO;
 import com.example.ecommerceapp.model.dto.BaseInvoiceDTO;
-import com.example.ecommerceapp.model.entities.Invoice;
-import com.example.ecommerceapp.model.enums.InvoiceStatus;
+import com.example.ecommerceapp.model.dto.InvoiceRejectedDTO;
+import com.example.ecommerceapp.model.dto.InvoicedApprovedDTO;
 import com.example.ecommerceapp.service.InvoiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -29,22 +30,22 @@ public class InvoiceController {
     }
 
     @GetMapping("/approved")
-    public ResponseEntity<ApiResponseDTO<List<Invoice>>> getApprovedInvoices() {
-        List<Invoice> invoices = invoiceService.getInvoicesByStatus(InvoiceStatus.APPROVED);
+    public ResponseEntity<ApiResponseDTO<List<InvoicedApprovedDTO>>> getApprovedInvoices() {
+        List<InvoicedApprovedDTO> invoicesDto = invoiceService.getApprovedInvoices();
         return ResponseEntity.ok(
-                ApiResponseDTO.<List<Invoice>>builder()
+                ApiResponseDTO.<List<InvoicedApprovedDTO>>builder()
                         .success(true)
                         .message("Approved invoices retrieved.")
-                        .data(invoices)
+                        .data(invoicesDto)
                         .build()
         );
     }
 
     @GetMapping("/rejected")
-    public ResponseEntity<ApiResponseDTO<List<Invoice>>> getRejectedInvoices() {
-        List<Invoice> invoices = invoiceService.getInvoicesByStatus(InvoiceStatus.REJECTED);
+    public ResponseEntity<ApiResponseDTO<List<InvoiceRejectedDTO>>> getRejectedInvoices() {
+        List<InvoiceRejectedDTO> invoices = invoiceService.getRejectedInvoices();
         return ResponseEntity.ok(
-                ApiResponseDTO.<List<Invoice>>builder()
+                ApiResponseDTO.<List<InvoiceRejectedDTO>>builder()
                         .success(true)
                         .message("Rejected invoices retrieved.")
                         .data(invoices)

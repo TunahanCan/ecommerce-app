@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "9d5433b5-698e-4c67-b271-4410b9edbed3",
+		"name": "ecommerce-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39840015"
+	},
+	"item": [
+		{
+			"name": "user-register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"john@doe.com\",\r\n    \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login-request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"john@doe.com\",\r\n    \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invoices/submit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"john@doe.com\",\r\n    \"amount\": 150.00,\r\n    \"productName\": \"ProductA\",\r\n    \"billNo\": \"INV001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/invoices/submit",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"invoices",
+						"submit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invoices/approved",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"john@doe.com\",\r\n    \"amount\": 150.00,\r\n    \"productName\": \"ProductA\",\r\n    \"billNo\": \"INV001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/invoices/approved",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"invoices",
+						"approved"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invoices/rejected",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"john@doe.com\",\r\n    \"amount\": 150.00,\r\n    \"productName\": \"ProductA\",\r\n    \"billNo\": \"INV001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/invoices/rejected",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"invoices",
+						"rejected"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/getAll",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/product/getAll",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"product",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/get/id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/product/getAll",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"product",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/createProduct",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Test Product\",\r\n  \"description\": \"test product description\",\r\n  \"price\": 100.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/product/getAll",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"product",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Updated Product Name\",\r\n  \"description\": \"updated description for the product.\",\r\n  \"price\": 150.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/product/update/1",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"product",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product/delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0VYUEVSVCJ9XSwiaWF0IjoxNzMyMTk2MDc2LCJleHAiOjE3MzIyODI0NzZ9.TlbxmPX0gHs6nko8A28rk9BFkLPMSou6UxlQ-Sy5Fz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MzIxODY5NzEsImV4cCI6MTczMjI3MzM3MX0.44K0zCxMKhXjgGSACAyGwNZqPUYDNMDmoCm8Sv5QO24",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Updated Product Name\",\r\n  \"description\": \"updated description for the product.\",\r\n  \"price\": 150.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:1616/product/delete/1",
+					"host": [
+						"localhost"
+					],
+					"port": "1616",
+					"path": [
+						"product",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
