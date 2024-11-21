@@ -1,7 +1,5 @@
 package com.example.ecommerceapp.config.security;
 
-
-import com.example.ecommerceapp.model.entities.User;
 import com.example.ecommerceapp.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,9 +16,8 @@ public class UserAuthService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return UserPrincipal.create(user);
     }
 }

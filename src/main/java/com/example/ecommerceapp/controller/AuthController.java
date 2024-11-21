@@ -1,10 +1,10 @@
 package com.example.ecommerceapp.controller;
 
 import com.example.ecommerceapp.config.security.JwtUtil;
-import com.example.ecommerceapp.config.security.UserPrincipal;
 import com.example.ecommerceapp.model.dto.LoginRequestDTO;
 import com.example.ecommerceapp.model.dto.RegistrationRequestDTO;
 import com.example.ecommerceapp.model.entities.User;
+import com.example.ecommerceapp.model.enums.Role;
 import com.example.ecommerceapp.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +57,7 @@ public class AuthController {
         user.setFirstName(registrationRequest.firstName());
         user.setLastName(registrationRequest.lastName());
         user.setEmail(registrationRequest.email());
+        user.setRole(Role.EXPERT);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -79,8 +80,8 @@ public class AuthController {
                             loginRequest.password()
                     )
             );
-            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            String token = jwtUtil.generateJwtToken(userPrincipal);
+            User user = (User) authentication.getPrincipal();
+            String token = jwtUtil.generateJwtToken(user);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
