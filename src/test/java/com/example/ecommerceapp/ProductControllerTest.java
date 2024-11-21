@@ -8,7 +8,6 @@ import com.example.ecommerceapp.repositories.UserRepository;
 import com.example.ecommerceapp.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
 
     @Autowired
-    private  MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -50,7 +49,7 @@ public class ProductControllerTest {
 
     private String jwtToken;
 
-    private  void loginForTest() throws Exception {
+    private void loginForTest() throws Exception {
         // User Registration
         RegistrationRequestDTO registrationRequest = new RegistrationRequestDTO(
                 "John", "Doe", "john.doe@example.com", "password123"
@@ -103,8 +102,8 @@ public class ProductControllerTest {
         @Test
         void given_products_then_get_all_products_success() throws Exception {
             // given
-            Product product1 = new Product( "Computer", "Description 1", 100.0);
-            Product product2 = new Product( "Computer2", "Description 2", 200.0);
+            Product product1 = new Product("Computer", "Description 1", 100.0);
+            Product product2 = new Product("Computer2", "Description 2", 200.0);
 
             productService.createProduct(product1);
             productService.createProduct(product2);
@@ -128,12 +127,12 @@ public class ProductControllerTest {
         @Test
         void update_product_success() throws Exception {
             // given
-            Product product1 = new Product( "Computer", "Description 1", 100.0);
-           Product createdProduct =  productService.createProduct(product1);
-            ProductRequestDTO productRequestDTO = new ProductRequestDTO("Computer" , "Updated description", 300.0 );
+            Product product1 = new Product("Computer", "Description 1", 100.0);
+            Product createdProduct = productService.createProduct(product1);
+            ProductRequestDTO productRequestDTO = new ProductRequestDTO("Computer", "Updated description", 300.0);
 
             // when
-            MvcResult result = mockMvc.perform(put("/product/update/"+ createdProduct.getId())
+            MvcResult result = mockMvc.perform(put("/product/update/" + createdProduct.getId())
                             .header("Authorization", "Bearer " + jwtToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(productRequestDTO)))
@@ -154,7 +153,7 @@ public class ProductControllerTest {
         @Test
         void delete_product_success() throws Exception {
             //given
-            Product product1 = new Product( "Computer", "Description 1", 100.0);
+            Product product1 = new Product("Computer", "Description 1", 100.0);
             productService.createProduct(product1);
 
             // when

@@ -1,16 +1,19 @@
 package com.example.ecommerceapp.service;
 
-import com.example.ecommerceapp.events.KafkaInvoiceRejectedService;
 import com.example.ecommerceapp.model.dto.*;
 import com.example.ecommerceapp.model.entities.Invoice;
+import com.example.ecommerceapp.model.entities.OutboxMessage;
 import com.example.ecommerceapp.model.entities.User;
 import com.example.ecommerceapp.model.enums.InvoiceStatus;
 import com.example.ecommerceapp.repositories.InvoiceRepository;
+import com.example.ecommerceapp.repositories.OutboxMessageRepository;
 import com.example.ecommerceapp.repositories.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,17 +24,19 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final UserRepository userRepository;
-    private final KafkaInvoiceRejectedService kafkaInvoiceRejectedService;
+    private final OutboxMessageRepository outboxMessageRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${app.credit-limit}")
     private Double invoiceLimit;
 
     public InvoiceService(InvoiceRepository invoiceRepository,
                           UserRepository userRepository,
-                          KafkaInvoiceRejectedService kafkaInvoiceRejectedService) {
+                          OutboxMessageRepository outboxMessageRepository, ObjectMapper objectMapper) {
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
-        this.kafkaInvoiceRejectedService = kafkaInvoiceRejectedService;
+        this.outboxMessageRepository = outboxMessageRepository;
+        this.objectMapper = objectMapper;
     }
 
     private String generateRejectedUid() {
@@ -75,7 +80,13 @@ public class InvoiceService {
             rejected.setAmount(invoice.getAmount());
             rejected.setBillNo(invoice.getBillNo());
             rejected.setProductName(invoice.getProductName());
-            kafkaInvoiceRejectedService.sendRejectedInvoiceEvent(rejected);
+            try {
+                String payload = objectMapper.writeValueAsString(rejected);
+                OutboxMessage outboxMessage = new OutboxMessage("InvoiceRejected", payload , LocalDateTime.now());
+                outboxMessageRepository.save(outboxMessage);
+            } catch (Exception e) {
+                throw new RuntimeException("Error while saving outbox message: " + e.getMessage());
+            }
         }
 
         String message = isApproved ? "Invoice accepted." : "Invoice rejected.";
