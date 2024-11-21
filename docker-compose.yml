@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Zookeeper Servisi
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-net
+
+  # Kafka Servisi
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    ports:
+      - "39092:39092"  # İçeriden erişim portu
+      - "39093:39093"  # Dış dünyaya erişim portu
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT_INSIDE://:39092,PLAINTEXT_OUTSIDE://:39093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_INSIDE://kafka:39092,PLAINTEXT_OUTSIDE://localhost:39093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT_INSIDE:PLAINTEXT,PLAINTEXT_OUTSIDE:PLAINTEXT
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT_INSIDE
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    networks:
+      - kafka-net
+
+  # Kafka UI Servisi
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"  # Kafka UI için port
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:39092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - kafka-net
+
+  # Ecommerce App Servisi
+  ecommerce-app:
+    build: .
+    container_name: ecommerce-app
+    ports:
+      - "1616:1616"  # Spring Boot uygulaması portu
+    environment:
+      SPRING_APPLICATION_NAME: ecommerce-app
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:test-commerce-db;DB_CLOSE_DELAY=-1
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_H2_CONSOLE_ENABLED: 'true'
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:39092
+      APP_CREDIT_LIMIT: 200
+      AUTH_APP_JWTSECRETKEY: TestSecurityKeyGalatasaray!987654321
+      AUTH_APP_JWTEXPIRATIONMS: 86400001
+      APP_KAFKA_REJECTED_TOPIC: commerce.rejected.invoice.1
+    depends_on:
+      - kafka
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge
