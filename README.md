@@ -1,10 +1,10 @@
-
-
 Build Docker Images
 To build Docker images for your services, run:
 
 
 docker-compose build
+
+
 This command reads the Dockerfile and builds the Docker image for your application.
 It will also build images for other services like Kafka if specified in docker-compose.yml.
 Run Docker Compose to Start All Services
