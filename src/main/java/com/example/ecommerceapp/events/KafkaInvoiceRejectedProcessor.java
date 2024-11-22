@@ -28,11 +28,24 @@ public class KafkaInvoiceRejectedProcessor {
     @Value("${app.kafka.rejected.topic}")
     private String topicName;
 
+    /**
+     * Constructs a new KafkaInvoiceRejectedProcessor.
+     *
+     * @param kafkaTemplate           The KafkaTemplate used for sending messages to Kafka.
+     * @param outboxMessageRepository The repository for managing outbox messages.
+     */
     public KafkaInvoiceRejectedProcessor(KafkaTemplate<String, String> kafkaTemplate, OutboxMessageRepository outboxMessageRepository) {
         this.kafkaTemplate = kafkaTemplate;
         this.outboxMessageRepository = outboxMessageRepository;
     }
 
+    /**
+     * A scheduled task that processes outbox messages at a fixed rate.
+     * It retrieves up to 10 outbox messages, sends them to the configured Kafka topic,
+     * and removes them from the outbox if successfully sent.
+     * <p>
+     * This method is executed every 5 seconds.
+     */
     @Scheduled(fixedRate = 5000)
     public void processOutboxMessages() {
         List<OutboxMessage> allMessages = outboxMessageRepository.findTop10ByOrderByCreatedAtAsc();
@@ -44,7 +57,7 @@ public class KafkaInvoiceRejectedProcessor {
             kafkaTemplate.send(record)
                     .whenComplete((result, ex) -> {
                         if (ex == null) {
-                            log.info("Sent message: {} to topic: {}",  message.getPayload(), topicName);
+                            log.info("Sent message: {} to topic: {}", message.getPayload(), topicName);
                             outboxMessageRepository.delete(message);
                         } else {
                             log.error("Failed to send message: {} due to {}", message.getPayload(), ex.getMessage(), ex);
