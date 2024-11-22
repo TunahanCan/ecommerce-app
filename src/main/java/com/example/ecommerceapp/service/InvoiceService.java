@@ -43,6 +43,13 @@ public class InvoiceService {
         return UUID.randomUUID().toString();
     }
 
+    /**
+     * Processes an invoice. Approves or rejects based on the credit limit.
+     * If rejected, adds an outbox message for further processing.
+     *
+     * @param request The invoice details to be processed
+     * @return Response indicating if the invoice was approved or rejected
+     */
     @Transactional
     public ApiResponseDTO<Void> processInvoice(BaseInvoiceDTO request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getUser().getEmail());
@@ -93,7 +100,13 @@ public class InvoiceService {
         return new ApiResponseDTO<>(isApproved, message, null);
     }
 
-    public InvoicedApprovedDTO convertToApprovedDTO(Invoice invoice) {
+    /**
+     * Converts an approved Invoice to InvoicedApprovedDTO.
+     *
+     * @param invoice The invoice to convert
+     * @return The DTO containing approved invoice details
+     */
+    private InvoicedApprovedDTO convertToApprovedDTO(Invoice invoice) {
         User user = invoice.getUser();
         if (user != null) {
             InvoicedApprovedDTO approved = new InvoicedApprovedDTO();
@@ -107,13 +120,25 @@ public class InvoiceService {
         }
     }
 
-    public List<InvoicedApprovedDTO> convertToApprovedDTOList(List<Invoice> invoices) {
+    /**
+     * Converts a list of approved invoices to a list of DTOs.
+     *
+     * @param invoices The list of approved invoices
+     * @return List of DTOs for approved invoices
+     */
+    private List<InvoicedApprovedDTO> convertToApprovedDTOList(List<Invoice> invoices) {
         return invoices.stream()
                 .map(this::convertToApprovedDTO)
                 .collect(Collectors.toList());
     }
 
-    public InvoiceRejectedDTO convertToRejectedDTO(Invoice invoice) {
+    /**
+     * Converts a rejected Invoice to InvoiceRejectedDTO.
+     *
+     * @param invoice The invoice to convert
+     * @return The DTO containing rejected invoice details
+     */
+    private InvoiceRejectedDTO convertToRejectedDTO(Invoice invoice) {
         User user = invoice.getUser();
         if (user != null) {
             InvoiceRejectedDTO rejected = new InvoiceRejectedDTO();
@@ -129,17 +154,33 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * Converts a list of rejected invoices to a list of DTOs.
+     *
+     * @param invoices The list of rejected invoices
+     * @return List of DTOs for rejected invoices
+     */
     public List<InvoiceRejectedDTO> convertToRejectedDTOList(List<Invoice> invoices) {
         return invoices.stream()
                 .map(this::convertToRejectedDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves all approved invoices as a list of DTOs.
+     *
+     * @return List of DTOs for approved invoices
+     */
     public List<InvoicedApprovedDTO> getApprovedInvoices() {
         List<Invoice> invoices = invoiceRepository.findByStatus(InvoiceStatus.APPROVED);
         return convertToApprovedDTOList(invoices);
     }
 
+    /**
+     * Retrieves all rejected invoices as a list of DTOs.
+     *
+     * @return List of DTOs for rejected invoices
+     */
     public List<InvoiceRejectedDTO> getRejectedInvoices() {
         List<Invoice> invoices = invoiceRepository.findByStatus(InvoiceStatus.REJECTED);
         return convertToRejectedDTOList(invoices);

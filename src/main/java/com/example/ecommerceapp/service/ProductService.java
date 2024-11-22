@@ -25,10 +25,10 @@ public class ProductService {
     }
 
     /**
-     * ID'ye göre ürün bilgilerini getirir ve önbelleğe alır.
+     * Gets product details by ID and caches the result.
      *
-     * @param id Ürün ID'si
-     * @return Belirli bir ürünü içeren Optional
+     * @param id Product ID
+     * @return An Optional containing the product details if found
      */
     @Cacheable(value = "productList", key = "#id")
     public Optional<Product> getProductById(Long id) {
@@ -36,10 +36,10 @@ public class ProductService {
     }
 
     /**
-     * Yeni ürün ekler ve önbelleği temizler.
+     * Adds a new product and clears the cache.
      *
-     * @param product Eklenecek ürün
-     * @return Oluşturulan ürün
+     * @param product Product to be added
+     * @return The created product
      */
     @CacheEvict(value = "productList", allEntries = true)
     public Product createProduct(Product product) {
@@ -47,11 +47,11 @@ public class ProductService {
     }
 
     /**
-     * Ürünü günceller ve önbelleği temizler.
+     * Updates an existing product and clears the cache.
      *
-     * @param id             Ürün ID'si
-     * @param productDetails Güncellenmiş ürün detayları
-     * @return Güncellenmiş ürün
+     * @param id Product ID
+     * @param productDetails Updated product details
+     * @return The updated product
      */
     @CacheEvict(value = "productList", allEntries = true)
     public Product updateProduct(Long id, Product productDetails) {
@@ -64,9 +64,9 @@ public class ProductService {
     }
 
     /**
-     * Ürünü siler ve önbelleği temizler.
+     * Deletes a product by ID and clears the cache.
      *
-     * @param id Silinecek ürün ID'si
+     * @param id Product ID to be deleted
      */
     @CacheEvict(value = "productList", allEntries = true)
     public void deleteProduct(Long id) {
