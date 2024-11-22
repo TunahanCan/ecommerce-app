@@ -6,6 +6,9 @@ import com.example.ecommerceapp.model.dto.RegistrationRequestDTO;
 import com.example.ecommerceapp.model.entities.User;
 import com.example.ecommerceapp.model.enums.Role;
 import com.example.ecommerceapp.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,11 +43,16 @@ public class AuthController {
     }
 
     /**
-     * Kullanıcı kayıt olma Endpointi
+     * Endpoint for user registration.
      *
-     * @param registrationRequest Kullanıcı kayıt bilgilerini içeren DTO
-     * @return Başarılı veya başarısız mesajı ile ApiResponse
+     * @param registrationRequest DTO containing user registration details.
+     * @return Response containing success or failure message.
      */
+    @Operation(summary = "Register a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "User with this email already exists")
+    })
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody RegistrationRequestDTO registrationRequest) {
 
@@ -66,11 +74,16 @@ public class AuthController {
 
 
     /**
-     * Kullanıcı giriş yapma Endpointi
+     * Endpoint for user authentication.
      *
-     * @param loginRequest Kullanıcı giriş bilgilerini içeren DTO
-     * @return JWT token'ı içeren ApiResponse
+     * @param loginRequest DTO containing user login credentials.
+     * @return Response containing JWT token or error message.
      */
+    @Operation(summary = "Authenticate a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> authenticateUser(@RequestBody LoginRequestDTO loginRequest) {
         try {
