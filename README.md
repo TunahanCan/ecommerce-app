@@ -1,5 +1,3 @@
-
-
 Build Docker Images
 To build Docker images for your services, run:
 
